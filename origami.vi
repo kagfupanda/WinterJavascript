@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Origami fish</title>
+<styel>
+button {font-size:large; font-family:Georgia, "Times New Roman", Times, serif;} 
+#directions {font-family:"Comic Sans MS", cursive;}
+video {display:none;}
+</style>
+<script>
+    var ctx;
+    var cwidth;
+    var cheight;
+    var ta;
+    var kamiw = 4;
+    var kamih = 4;
+    var i2p = 72;
+    var dashlen = 8;
+    var dgap = 2.0;
+    var ddashlen = 6.0
+    var ddot = 2.0;
+    var dratio = dashlen/(dashlen+dgap);
+    var ddtotal = ddashlen+3*ddot;
+    var ddratio1 = ddashlen/ddtotal;
+    var ddratio2 = (ddashlen+ddot)/ddtotal;
+    var ddratio3 = (ddashlen+2*ddot)/ddtotal;
+    var kamix = 10;
+    var kamiy = 10;
+    var nextstep;
+    function dist(x1, y1, x2, y2) {
+        var x = x2-x1;
+        var y = y2-y1;
+        return Math.sqrt(x*x+y*y); 
+   }
+   function intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
+    // only works on line segments that do not intersect and are not vertical
+    var m12 = (y2-y1)/(x2-x1);
+    var m34 = (y4-y3)/(x4-x3);
+    var m = m34/m12;
+    var x = (x1-y1/m12-m*x3+y3/12)/(1-m);
+    var y = m12*(x-x1)+y1;
+    return ([x,y]);
+    }
+    function init() {
+       canvas1 = document.getElementById("canvas");
+       ctx = canvas1.getContext("2d");
+       cwidth = canvas1.width;
+       cheight = canvas1.height;
+       ta = document.getElementById("directions");
+       nextstep = 0;
+       ctx.fillStyle = "white";
+       ctx.lineWidth = origwidth;
+       origstyle = ctx.strokeStyle;
+       ctx.font = "15px Georgia, Times, serif";
+       donext();
+   }
+   function directions() {
+        ctx.fillStyle = "black";
+        ctx.font = "15px Georgia, Times, serif";
+        ctx.fillText("Make valley fold", 10, 20);
+        valley(200, 18, 300, 18,"orange");
+        ctx.fillText("Make mountain fold",10,50);
+        mountain(200,48, 300, 48, "orange");
+        ctx.fillText("unfolded fold line",10,100);
+        skinnyline(200,98,300,98);
+        ctx.fillText("When senses of fold matters:", 10, 150);
+        ctx.fillText("unfolded valley ford", 10, 180);
+        valley(200,178,300,178);

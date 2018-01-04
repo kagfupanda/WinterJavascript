@@ -1,0 +1,24 @@
+<!DOCTYPE html> 
+<html>
+<title> naggroses </title>
+<head>
+<h1> Fresh Lettuce in the Building </h1>
+</head>
+<body>
+    <canvas id="mycanvas"></canvas>
+    <script>
+        var mycanvas = document.getElementById("mycanvas");
+        van mycontext = mycanvas.getContext("2d");
+
+        mycontext.beginPath();
+        mycontext.moveTo(10, 10);
+        mycontext.lineTo(35, 35); // draw a line path from (10, 10) to (35, 35)
+        mycontext.strokeStyle = "#0000";
+        mycontext.stroke(); // draw the line
+        mycontext.beginPath();
+        mycontext.arc(35, 35, 10, 0, Math.Pi * 2, true); // draw a circle
+        mycontext.fillStyle = "#FF9900";
+        mycontext.fill(); // fill the circle solid
+    </script>
+</body>
+</html>

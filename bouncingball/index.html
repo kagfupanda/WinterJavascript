@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Video Bounce</title>
+<meta charset="UTF-8">
+<style>
+#vid {position:absolute; display:none; }
+#canvas {position:absolute; z-index:10; top:0px; left:0px;}
+#revbtn {position:absolute; z-index:20; }
+</style>
+<script type ="text/javascript">
+var ctx;
+var cwidth;
+var cheight;
+var ballrad = 50;
+var ballx = 50;
+var bally = 60;
+var maskrad;
+var ballvx = 2;
+var ballvy = 4;
+var v;
+function restart() {
+    v.currentTime=0;
+    v.play();
+}
+function init(){
+    canvas1 = document.getElementById('canvas');
+    ctx = canvas1.getContext('2d');
+    canvas1.width = window.innerWidth;
+    cwidth = canvas1.width;
+    canvas1.height = window.innerHeight;
+    cheight = canvas1.height;
+    v = document.getElementById("vid");
+    v.addEventListener("ended", restart, false);
+    v.width = Math.min(v.videoWidth/3, .5*cwidth);
+    v.height = Math.min(v.videoHeight/3, 0.5*cheight);
+    videow = v.width;
+    videoh = v.height;
+    ballrad = Math.min(50, 0.5*videow, 0.5*videoh);
+    maskrad = 0.4*Math.min(videow, videoh);
+    ctx.oineWidth = ballrad;
+    ctx.strokeStyle = "rgb(200,0,50)";
+    ctx.fillStyle="white";
+    v.play();
+    setInterval(drawscene, 50);
+}
+function drawscene() {
+    ctx.clearRect(0, 0, cwidth, cheight);
+    moveandcheck();
+    ctx.drawImage(v, ballx, bally, videow, videoh);
+    ctx.beginPath();
+    ctx.moveTo(ballx, bally);
+    ctx.lineTo(ballx+videow, bally);
+    ctx.lineTo(ballx+videow,bally+0.5*videoh);
+    ctx.lineTo(ballx+0.5*videow+maskrad, bally+.5*videoh);
+    ctx.arc(ballx+0.5*videow, bally+.5*videoh, maskrad, 0, Math.PI, true);
+    ctx.lineTo(ballx,bally+.5*videoh);
+    ctx.lineTo(ballx, bally);
+    ctx.fill();
+    ctx.moveTo(ballx, bally+0.5*videoh);
+    ctx.lineTo(ballx, bally+videoh);
+    ctx.lineTo(ballx+videow, bally+videoh);
+    ctx.lineTo(ballx+videow, bally+0.5*videoh);
+    ctx.lineTo(ballx+0.5*videow+maskrad, bally+0.5*videoh);
+    ctx.arc(ballx+0.5*videow, bally+0.5*videoh, maskrad, 0, Math.PI, false);
+    ctx.lineTo(ballx, bally+0.5*videoh);
+    ctx.fill();
+    ctx.strokeRect(0,0,cwidth,cheight);
+}
+function moveandcheck() {
+    var nballx = ballx + ballvx+0.5*videow;
+    var nbally = bally +ballvy+0.5*videoh;
+    if(nballx > cwidth) {
+        ballvx =- ballvx;
+        nballx = cwidth;
+    }
+    if (nballx < 0) {
+        nballx = 0;
+        ballvx = -ballvx;
+    }
+    if(nbally > cheight) {
+        nbally = cheight;
+        ballvy =- ballvy;
+    }
+    if(nbally < 0) {
+        nbally  = 0;
+        ballvy = -ballvy;
+    }
+    ballx = nballx-.5*videow;
+    bally = nbally-.5*videoh;
+}
+function reverse() {
+    ballvx = -ballvx;
+    ballvy = -ballvy;
+}
+</script>
+</head>
+<body onLoad="init()">
+<video id="vid" loop="loop" preload="auto">
+<source src="Spongebob.mp4" type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'>
+Your browser does not accept the video tag.
+</video>
+<button id="revbtn" onClick="reverse()"> Reverse</button></br>
+<canvas id="canvas">
+This browser does not support the HTML5 canvas element.
+</canvas>
+</body>
+</html>
